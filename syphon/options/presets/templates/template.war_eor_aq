@@ -1,0 +1,86 @@
+# -------------------------------------------------------------------
+# syphon -- template.war_eor_aq
+# -------------------------------------------------------------------
+# ... glomming your telnet data since 2009.
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# COPYRIGHT
+#
+# SEE README FILE FOR COPYRIGHT INFORMATION
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+#
+# --------------------- QUICK INFO ----------------------------------
+# THIS IS A PRESET TEMPLATE
+# -- COMPATIBLE WITH S.E.E.R. WARRIOR MODULE v.2 (LEONIDAS)
+#    BUILT INTO SEER RELEASE 1.50 ('OR GREATER' COMPATABILITY IS
+#    EXPECTED)
+# -- REQUIRES 'aplus_plugin' PLUGIN [formerly called LaBLS]
+#    WHICH IS PROPRIETARY
+#
+# --------------------- DECLARATIONS --------------------------------
+#
+[mysql]
+MYSQLDB:mod_openopc		
+# DATABASE NAME
+MYSQLIP:localhost
+# IPADDRESS, should be "localhost" or actual IP address
+# -- USE "QUOTES" FOR IF RUNNING THIS PROGRAM UNDER UNIX
+# -- DO NOT USE QUOTES IF RUNNING UNDER WIN
+EOR_TABLE:APLUS_END_OF_RUN
+# MYSQL TABLE THAT HOLDS ASSOCIATIONS OF MACHINENAME TO END
+# OF RUN DATA...  
+# COLUMN 1 = LINE # 
+# COLUMN 2 = EOR (ACTUAL)
+# COLUMN 3 = EOR PENDING
+# COLUMN 4 = DATESTAMP OF EOR UPDATE (ACTUAL)
+# COLUMN 5 = OPERATOR
+MYSQLUSER:mysql		
+# YOUR MYSQL USERNAME
+MYSQLPASS:mysqlpassword
+# YOUR MYSQL PASSWORD
+COMMITTRANSACTIONS:YES
+# COMMIT DATABASE TRANSACTIONS AFTER EXECUTION
+# -- YES or NO
+# -- TRANSACTIONAL DATABASES SUCH AS INNODB REQUIRE
+#    THIS FUNCTIONALITY, FUTURE MYISAM WILL ALSO
+# 
+[device]
+YOURDEVICEIP:10.1.1.99
+# target device IP address
+YOURDEVICEPORT:4001
+# target device telnet port
+YOURDEVICENAME:my_labls_scanner_1
+# name this device, so it shows up
+# in your running processes
+YOURDEVICENAMEFORLOG:LABLSSCAN1
+# what is the name you gave this device in WARRIOR LaBLS
+# plugin options file under the identification... 
+#	"$aplus_LINE_ID_BY_NUMBER[{int}][{int}]=YOURDEVICENAMEFORLOG"
+#	NOTE - this does not have to be a string... it can be a number
+#	if that is how you are declaring your lines (by number).
+STARTCHAR:0
+# parse the data stream, start at...
+ENDCHAR:6
+# then end at...
+# NOTE - if you have a variable length incoming data, but
+#        always know your line will end with YOURENDOFLINE,
+#  	 then you can 'cheat' by setting ENDCHAR equal to
+#        some very high or ridiculous number, like 1000
+#        or 99
+REQUIRENUMERICVALUE:yes
+# do you want to require that only a
+# numeric value can be processed?
+# will prevent errors if accidently
+# trying to write a string to a numeric
+# plc register.
+# -- valid values are 'yes' or 'no'
+YOURENDOFLINE:\r\n
+# character or group of characters to
+# indicate the end of an input stream
+YOURTIMEOUT:300
+# data receive timeout, if no data
+# received in X seconds, then recycle
+# the connection.
+#
+# -------------------------------------------------------------------

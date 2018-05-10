@@ -1,0 +1,93 @@
+# -------------------------------------------------------------------
+# syphon -- template.seer_cw
+# -------------------------------------------------------------------
+# ... glomming your telnet data since 2009.
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# COPYRIGHT
+#
+# SEE README FILE FOR COPYRIGHT INFORMATION
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+#
+# --------------------- QUICK INFO ----------------------------------
+# THIS IS A PRESET TEMPLATE
+# -- COMPATIBLE WITH S.E.E.R. CHECKWEIGHER MODEL V1 (EUDAMIDAS)
+#    BUILT INTO SEER PRE-RELEASE 4.30 ('OR GREATER' COMPATABILITY IS
+#    EXPECTED)
+#
+# --------------------- DECLARATIONS --------------------------------
+#
+[mysql]
+MYSQLDB:mod_openopc		
+# DATABASE NAME
+MYSQLIP:localhost
+# IPADDRESS, should be "localhost" or actual IP address
+# -- USE "QUOTES" FOR IF RUNNING THIS PROGRAM UNDER UNIX
+# -- DO NOT USE QUOTES IF RUNNING UNDER WIN
+CHECKWEIGHERMODEL_TABLE_SYPHON:CHECKWEIGHERMODEL_SYPHON
+# MYSQL TABLE THAT HOLDS ASSOCIATIONS OF MACHINENAME TO ACTIVE
+# RUNNING RECIPE WHERE MACHINENAME IS COLUMN 1, AND RECIPE IS 
+# COLUMN 2.
+CHECKWEIGHERMODEL_TABLE:CHECKWEIGHERMODEL
+# MYSQL TABLE THAT HOLDS ALL CHECKWEIGHER GATHERED DATA,
+# THIS IS WHERE YOU WANT TO STORE THE DATA THAT SYPHON GATHERS
+MYSQLUSER:mysql		
+# YOUR MYSQL USERNAME
+MYSQLPASS:mysqlpassword
+# YOUR MYSQL PASSWORD
+COMMITTRANSACTIONS:YES
+# COMMIT DATABASE TRANSACTIONS AFTER EXECUTION
+# -- YES or NO
+# -- TRANSACTIONAL DATABASES SUCH AS INNODB REQUIRE
+#    THIS FUNCTIONALITY, FUTURE MYISAM WILL ALSO
+#
+# NOTE THE RETENTION TIME OF RECORDS IS SOMETHING
+#   YOU'LL HAVE TO 'FUDGE' IN SEER+mod_openopc
+#   AS WE CAN'T CARRY THAT FUNCTION OUT FROM HERE
+#   JUST SET UP A 'preset' SIMILAR TO THE SYSTEM_FAULTS
+#   ONE AND ENTER YOUR RETENTION TIME.  WE ASSUME
+#   YOU HAVE A FULL WORKING KNOWLEDGE OF mod_openopc.
+# 
+[device]
+YOURDEVICEIP:10.1.1.99
+# target device IP address
+YOURDEVICEPORT:4001
+# target device telnet port
+YOURDEVICENAME:my_checkweigher_1
+# name this device, so it shows up
+# in your running processes
+YOURDEVICENAMEFORLOG:MY_CHECKWEIGHER_N1
+# what is the name you gave this device in SEER 
+# localoptions file under the identification...
+#      "$CHECKWEIGHERMODEL_NAME[{int}]=YOURDEVICENAMEFORLOG"
+STARTCHAR:0
+# parse the data stream, start at...
+ENDCHAR:6
+# then end at...
+# NOTE - if you have a variable length incoming data, but
+#        always know your line will end with YOURENDOFLINE,
+#  	 then you can 'cheat' by setting ENDCHAR equal to
+#        some very high or ridiculous number, like 1000
+#        or 99
+REQUIRENUMERICVALUE:yes
+# do you want to require that only a
+# numeric value can be processed?
+# will prevent errors if accidently
+# trying to write a string to a numeric
+# plc register.
+# -- valid values are 'yes' or 'no'
+YOURENDOFLINE:\r\n
+# character or group of characters to
+# indicate the end of an input stream
+YOURSCALEFACTOR:1
+# if you need to convert from one unit of measure
+# to another, then enter your scale factor here...
+# for example, to convert from grams to ounces,
+# simply enter a scale factor of 0.0352739619
+YOURTIMEOUT:300
+# data receive timeout, if no data
+# received in X seconds, then recycle
+# the connection.
+#
+# -------------------------------------------------------------------

@@ -1,0 +1,57 @@
+# -------------------------------------------------------------------
+# syphon -- options.py
+# -------------------------------------------------------------------
+# ... glomming your telnet data since 2009.
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# COPYRIGHT
+#
+# SEE README FILE FOR COPYRIGHT INFORMATION
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+#
+# --------------------- DECLARATIONS and FLAGS ----------------------
+#
+# --------------------- RUNTIME -------------------------------------
+[global_path]
+PROGPATH_MODOPENOPC:C:\mod_openopc_2
+# full path 
+# -- use c:\mod_openopc_2 for WIN
+# -- use /opt/mod_openopc_2 for UNIX
+PROGPATH_MODOPENOPC_GWCOMM:gwcomm
+# --------------------- COMMANDS ------------------------------------
+[global_commands]
+PYTHON_EXECUTABLE:/usr/local/bin/python
+# python executable
+# -- usually /usr/local/bin/python on UNIX
+# -- usually C:\Python\python.exe on WIN
+# --------------------- GLOBAL OPTIONS ------------------------------
+[global_options]
+EXPORT_9999_ON_NON_NUMERIC:YES
+# valid options are 'YES' or 'NO'
+# in the event a non-numeric value is encountered, and you have
+# chosen in a preset file to require the value be numeric, should
+# we export a '9999' (indicating a fault) to the device?
+# --------------------- NETWORK CONNECTIONS -------------------------
+[global_network]
+MYIP:10.1.12.253				
+# what is your CU static IP address?
+MYDEFAULTGATEWAY:10.1.1.1			
+# what is your CU default gateway IP address?
+# ---------------------- AUTO LAUNCH --------------------------------
+[auto_launch]
+AUTO_LAUNCH:RUN_OPC,mozz_case_pack_b_scale|RUN_OPC,mozz_case_pack_c_scale|RUN_OPC,shred_case_pack_scale|RUN_SEER_CHECKWEIGHERMODEL_V1,checkweighermodel_shred_bulk_carton_1
+# define syphon routines to auto launch
+# -- form is COMMAND,preset-file-name,argument1,argument2,argument3|COMMAND,preset-file-name,argument1,argument2,argument3
+# -- DO NOT use any spaces. 
+# -- DO NOT use a trailing pipe. 
+# -- if a COMMAND does not have any arguments, then it would simply be...
+#       COMMAND,preset-file|COMMAND,preset-file,argument1|COMMAND,preset-file,argument1,argument2
+#	... you get the idea.
+#	... ultimately everything between 'pipes' is passed as a newly spawned process
+#	    where commas are replaced by whitespace.  So, the example above would be passed as...
+#		--> syphon.py COMMAND preset-file
+#		--> syphon.py COMMAND preset-file argument-1
+#		--> syphon.py COMMAND preset-file argument-1 argument-2
+# -------------------------------------------------------------------
+

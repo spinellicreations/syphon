@@ -1,0 +1,95 @@
+# -------------------------------------------------------------------
+# syphon -- template.cond_retrans
+# -------------------------------------------------------------------
+# ... glomming your telnet data since 2009.
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# COPYRIGHT
+#
+# SEE README FILE FOR COPYRIGHT INFORMATION
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+#
+# --------------------- QUICK INFO ----------------------------------
+# THIS IS A CONDITIONAL RETRANSMISSION PRESET FILE
+#
+# --------------------- DECLARATIONS --------------------------------
+#
+[mysql]
+MYSQLDB:mod_openopc		
+# DATABASE NAME
+MYSQLIP:127.0.0.1
+# IPADDRESS, should be "localhost" or actual IP address
+# -- USE "QUOTES" FOR IF RUNNING THIS PROGRAM UNDER UNIX
+# -- DO NOT USE QUOTES IF RUNNING UNDER WIN
+TABLE_SYPHON:TOUCHPANEL
+# MYSQL TABLE THAT HOLDS ALL VALUE TO COMPARE,
+# TO CHECK FOR CONDITIONAL RETRANSMISSION
+# COLUMN 1 = DATESTAMP
+# COLUMN 2 = SOURCE
+# COLUMN 3 = VALUE TO CHECK AGAINST
+YOURDEVICENAMEFORLOG:RIC_FN_PKG_1_ELEVATOR
+# WE WILL SEARCH THE TABLE FOR THE LATEST DATESTAMPED
+# RECORD WHERE COLUMN 2 = 'YOURDEVICENAMEFORLOG',
+# RETRIEVE THE VALUE FROM COLUMN 3, AND COMPARE IT TO
+# 'YOURMATCHVALUE' (below).
+YOURDEVICECOLUMNNAME:PANELNAME
+# NAME OF COLUMN 2 (OR OTHER COLUMN) THAT YOURDEVICENAMEFORLOG
+# WOULD BE FOUND IN... WE ASSUME COLUMN 1 IS ALWAYS 'DATESTAMP'
+# AND COLUMN 3 IS ALWAYS WHERE THE TRIGGER IS LOCATED.
+MYSQLUSER:mysql		
+# YOUR MYSQL USERNAME
+MYSQLPASS:mysqlpassword
+# YOUR MYSQL PASSWORD
+COMMITTRANSACTIONS:YES
+# COMMIT DATABASE TRANSACTIONS AFTER EXECUTION
+# -- YES or NO
+# -- TRANSACTIONAL DATABASES SUCH AS INNODB REQUIRE
+#    THIS FUNCTIONALITY, FUTURE MYISAM WILL ALSO
+#
+[broadcast]
+YOURBROADCASTPORT:10000
+# port you wish to rebroadcast on
+# -- suggest 10000 or higher, unless you have one
+#    in mind.
+YOURMATCHVALUE:0.0
+# value (string) you wish to check against for
+# conditional retransmission.
+YOURMATCHWAIT:0.2
+# value (in decimal seconds) you wish to wait before
+# checking for the trigger value match.
+# simply set to '0' if you do not wish to wait.
+#
+[device]
+YOURDEVICEIP:10.120.248.113
+# target device IP address
+YOURDEVICEPORT:1025
+# target device telnet port
+YOURDEVICENAME:virtual_scanner_0
+# name this device, so it shows up
+# in your running processes
+STARTCHAR:0
+# parse the data stream, start at...
+ENDCHAR:99
+# then end at...
+# NOTE - if you have a variable length incoming data, but
+#        always know your line will end with YOURENDOFLINE,
+#  	 then you can 'cheat' by setting ENDCHAR equal to
+#        some very high or ridiculous number, like 1000
+#        or 99
+REQUIRENUMERICVALUE:no
+# do you want to require that only a
+# numeric value can be processed?
+# will prevent errors if accidently
+# trying to write a string to a numeric
+# plc register.
+# -- valid values are 'yes' or 'no'
+YOURENDOFLINE:\r\n
+# character or group of characters to
+# indicate the end of an input stream
+YOURTIMEOUT:300
+# data receive timeout, if no data
+# received in X seconds, then recycle
+# the connection.
+#
+# -------------------------------------------------------------------

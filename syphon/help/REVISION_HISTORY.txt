@@ -1,0 +1,225 @@
+syphon	
+---------------------------------------------------------------------
+# ... "Still learnin how to pray, tryin hard not to stray.  Try to
+#     see things your way; still learnin how to pray.  Still
+#     learnin how to trust; it's so hard to open up.  But I'd do
+#     anything for a Penguin, still learnin how to trust.
+#     Still learnin how to bend, and how to let you in.
+#     In a world fulla tears, we'll conquer all our fears.
+#     Still learnin how to fly, I wanna take you high.
+#     I'll be there till the end, I'll be your Programmer
+#     and your friend... just learnin how to bend..."
+#	-- on the topic of this recent 'all things must run in
+#	   Windows' directive.  
+---------------------------------------------------------------------
+# ... syphon is a telnet capture utility.  it is specifically
+#     designed to read a 'line at a time' from devices such as
+#     barcode readers or scales, which will output a EOL terminated
+#     string upon event occurance.  
+---------------------------------------------------------------------
+# ... syphon functions over ethernet, relying upon 'serial over eth'
+#     devices, which are becoming more and more comon.  syphon 
+#     will auto-reconnect at a specified interval if no data is
+#     gathered, ensuring that you have reliability after events such
+#     as device failure / power loss / etc.
+---------------------------------------------------------------------
+# ... syphon is based on blips.  that is to say that blips was a
+#     proof of concept, proving that 'it could be done', but was
+#     also very limited and had absolutely no fault recovery.
+#     syphon seeks to perform all the functions of blips, but with
+#     automated fault recovery and much greater speed / efficiency.
+---------------------------------------------------------------------
+#...  portions of syphon utilize implemtations published (free) by
+#     Doug Hellmann (www.doughellmann.com), specifically with
+#     regard to COMM.
+---------------------------------------------------------------------
+COPYRIGHT
+
+# THE FOLLOWING 10 LINES MAY NOT BE REMOVED, but may be
+#   appended with additional contributor info.
+syphon Copyright (C) 2008-2013
+V. Spinelli for Sorrento Lactalis American Group
+This program comes with ABSOLUTELY NO WARRANTY;
+As this program is based on [and has dependancies]
+the content of GPL and LGPL works, GPL is preserved.
+This is open software, released under GNU GPL v3,
+and you are welcome to redistribute it, with this
+tag in tact.
+... http://www.sorrentolactalis.com/
+... http://www.spinellicreations.com/
+A copy of the GPL should be included with this work.
+If you did not receive a copy, see...
+http://www.gnu.org/licenses/gpl-3.0.txt
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+CONTACT		
+		Author			V. Spinelli
+				Email:	Vince@SpinelliCreations.com
+				Site:	http://spinellicreations.com
+				Handle:	PoweredByDodgeV8
+
+		Copyright Holder	Sorrento Lactalis American Group
+				Email:	http://www.sorrentocheese.com/about/contact.html
+				Site:	http://www.sorrentolactalis.com
+---------------------------------------------------------------------
+REVISION HISTORY...
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+ENTRY	NAME		V		REV	NOTES
+-----	----		-		---	-----
+
+0	blips		0.0-0-a		n/a	none, just getting started
+
+1	blips		0.0-1-a		n/a	restructured to export opc data
+						to mod_openopc_2 daemon write
+						service, cleaned up some errors
+						and problems, successfully ran
+						for a few hours, but telnet will
+						blow itself up if there is a 
+						connection loss.
+
+2	syphon		0.1-0-a		n/a	ported to python, added 'timeout'
+						interval for no-data-received and
+						auto-reconnect, cleaned up export
+						function to mod_openopc_2,
+						passed 30 day run test, although
+						this is still an 'alpha' build, it
+						is stable.
+
+3	syphon		0.1-1-a		n/a	the port is cleaned up to allow
+						full cross platform compatability,
+						and syphon runs as 'platform agnostic'.
+
+4	syphon		0.1-1-b		1	added time echo to several system
+						feedback strings.
+
+5	syphon		0.1-1-c		2	removed requirement to hardcode 
+						global options file.  syphon now
+						auto-declares its directory structure
+						based on OS type.
+
+6	syphon		0.1-2		n/a	deprecated procname in favor of 
+						setproctitle library
+
+7	syphon		0.1-3		n/a	added integration with S.E.E.R. 
+						CheckWeigher Model in the form of
+						RUN_SEER_CHECKWEIGHERMODEL_V1, which
+						is compatiable with version 1 (Eudamidas),
+						and should be with future versions as well.
+						added requirement (optional if using this
+						feature) for MySQL-python.
+
+8	syphon		0.1-4		n/a	enhancement of v 0.1-3, where a 'cheat' 
+						is now permitted for unknown or variable
+ 						length terminal server data / input data.
+						if you have a device that outputs a variable
+						length string, but always ends with the same
+						'YOURENDOFLINE' characters, then you can
+						simply start where you like and end at some
+						ridiculously high character number, like 1000
+						or 99.  The string (or number) will auto-truncate.
+
+9	syphon		0.1-4		a	added variable declaration to helper script in order
+						to shorten up the quick-start command line length
+						and also added requirement of nohup to properly
+						fork into background and remain persistent. 
+						added bit bucket dump to clean up the screen.
+
+10	syphon		0.1-4		b	removed variable declaration from helper script, 
+						was posing problems... but the 'long form' for
+						forking works wonderfully.
+
+11	syphon		0.1-5		n/a	cleaned up readme file.  eliminated all helpers,
+						such that an AUTO_LAUNCH routine was added.
+
+12	syphon		0.1-5		a	bugfix - parsing strings based upon stand and
+						end character would return whole original string
+						which was a variable naming error.  fixed.
+
+13	syphon		0.1-6		n/a	added compatability with SEER_CHECKWEIGHERMODEL_V2
+						which logs the operator (person in control) of 
+						each production line (scale / checkweigher)
+
+14	syphon		0.1-6		a	bugfix - mysql keepalive instruction was unsuccessful,
+						or at least that is why we believe that after long
+						periods of inactivity syphon will fail to resume
+						data logging after activity starts up again (mysql
+						socket timeout).  The syphon_fault_unk() function is
+						deprecated by syphon_fault_recycle() function, which
+						recycles both the telnet connection and the mysql db
+						socket connection every 5 minutes during periods of
+						inactivity.  It also handles faulted instructions by
+						dumping and then re-establishing telnet and db comm.
+
+15	syphon		0.1-7		n/a	added compatability with SEER_WARRIOR module when
+						utilizing the LaBLS ('lactalis_bartender_labeling_system')
+						proprietary plugin.  Routine called 'RUN_SEER_WARRIOR_
+						EOR_ACQUIRE' and 'RUN_SEER_WARRIOR_EOR_EXECUTE'.
+						Compatiable with WARRIOR v.2 and SEER v.1.43 (release).
+
+16	syphon		0.1-7		a	bugfix for RUN_SEER_WARRIOR_EOR_EXECUTE and ACQUIRE 
+						where the incoming barcodes were not being parsed
+						properly due to a typo (end of line characters removed
+						from the original input string rather than from the
+						already manipulated one - so the whole chunk was
+						being logged).
+
+17	syphon		0.1-7		b	added routine RUN_MYSQL to log a value to a mysql db
+						with datestamp and source id.  
+						bugfix for a few of the parse instances, throughout
+						all routines, where string data when attempting to
+						parse would receive unwanted additional end of line
+						characters (minor issue). 
+						subsequent reconnect attempts on 3 second interval
+						rather than former 60 second interval.
+
+18	syphon		0.1-7		c	AUTO_LAUNCH now monitors child threads, and anything
+						that faults / dies / or is killed is automatically
+						restarted on a rolling 5 second verification routine.
+
+19	syphon		0.1-7		d	SEER_WARRIOR EOR_EXECUTE will now log the times
+						it executes an end of run instruction to a line in the
+						APLUS ACTION log.
+
+20	syphon		0.1-8		n/a	finally split the various preset types up a little
+						better, and gave each a unique file extension/suffix.
+						added routine RUN_MATCH to check for a known value,
+						and then write some other known value to target.
+
+21	syphon		0.1-8		a	added ability to search during MATCH routine, rather
+						than require exact match.
+
+22	syphon		0.1-8		b	bugfixes for 0.1-8a
+
+23	syphon		0.1-8		c	added ability to pull value to compare (for RUN_MATCH)
+						from database rather than having to be statically
+						declared... and added rebroadcast capabilities to
+						all subroutines.
+
+24	syphon		0.1-9			cleaned up the way we handle "REQUIRE_NUMERICVALUE"
+						variable, such that it forces value to FLOAT type
+						and then utilizes it (if and only if) you specify
+						variable as required - this does not affect SEER
+						WARRIOR EOR INTEGRATION which uses INT style values.
+						also - going to polish this up a little and declare
+						it as 1.9, as the bulk o changes from 0.1-8c are
+						a worthy of an increment.
+
+25	syphon		0.1-9		a	bugfix (preventative) for event files where potentially 
+						a file lock issue could occur if two events 
+						(generate FLATFILE) occurred for the same item during
+						the same second.
+
+26	syphon		0.1-10		n/a	added mysql database logging for RUN_OPC and RUN_MATCH
+						routines, so that one device connection can perform
+						both OPC functionality and SQL Logging functionality.
+
+27	syphon		0.1-11		n/a	bugfix for build #26, where RUN_MATCH considered both
+						command line option #2 and #3 as the same thing.
+						added conditional checks for routines RUN_OPC, RUN_MATCH,
+						and RUN_MYSQL.  similar in nature to
+						"RUN_CONDITIONAL_RETRANSMIT", where it checks DB for
+						device conditional flag before proceeding with task.
+
+---------------------------------------------------------------------

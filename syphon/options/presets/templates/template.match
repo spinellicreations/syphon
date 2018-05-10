@@ -1,0 +1,116 @@
+# -------------------------------------------------------------------
+# syphon -- template.match
+# -------------------------------------------------------------------
+# ... glomming your telnet data since 2009.
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# COPYRIGHT
+#
+# SEE README FILE FOR COPYRIGHT INFORMATION
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+#
+# --------------------- QUICK INFO ----------------------------------
+# THIS IS A PRESET TEMPLATE
+# -- COMPATIBLE WITH mod_openopc_2 REVISION 3.0-4 AND UP.
+#
+# --------------------- DECLARATIONS --------------------------------
+#
+[modopenopc]
+YOURMODOPENOPCDAEMON:grimlock_hmi			
+# mod_openopc write daemon being used
+YOURTARGET:[MOZZ_B_ELEVATOR]
+# mod_openopc OPC device topic name
+YOURLEAF:F8:0
+# mod_openopc target leaf to write to
+YOUREXECUTIONVALUE:1
+# value to write to target leaf upon successful match
+YOURMATCHVALUE:something_to_match
+# string you wish to test for a match against
+#
+[device]
+YOURDEVICEIP:10.1.12.110
+# target device IP address
+YOURDEVICEPORT:1028
+# target device telnet port
+YOURDEVICENAME:mozz_case_pack_b_scale
+# name this device, so it shows up
+# in your running processes
+YOURDEVICENAMEFORLOG:mozz_b_scale
+# what would you like the 'SOURCE' column to indicate in
+# the database record for values read from this device
+STARTCHAR:0
+# parse the data stream, start at...
+ENDCHAR:5
+# then end at...
+# NOTE - if you have a variable length incoming data, but
+#        always know your line will end with YOURENDOFLINE,
+#  	 then you can 'cheat' by setting ENDCHAR equal to
+#        some very high or ridiculous number, like 1000
+#        or 99
+REQUIRENUMERICVALUE:yes
+# do you want to require that only a
+# numeric value can be processed?
+# will prevent errors if accidently
+# trying to write a string to a numeric
+# plc register.
+# -- valid values are 'yes' or 'no'
+YOURENDOFLINE:\r\n\r
+# character or group of characters to
+# indicate the end of an input stream
+YOURTIMEOUT:300
+# data receive timeout, if no data
+# received in X seconds, then recycle
+# the connection.
+#
+[mysql]
+#
+# -- THE FOLLOWING ONLY REQUIRED IF OPTION "LOG" BEING USED ! --
+#
+MYSQLDB:mod_openopc		
+# DATABASE NAME
+MYSQLIP:127.0.0.1
+# IPADDRESS, should be "localhost" or actual IP address
+# -- USE "QUOTES" FOR IF RUNNING THIS PROGRAM UNDER UNIX
+# -- DO NOT USE QUOTES IF RUNNING UNDER WIN
+TABLE_SYPHON:SYPHON_MYSQL
+# MYSQL TABLE THAT HOLDS ALL GATHERED DATA,
+# THIS IS WHERE YOU WANT TO STORE THE DATA THAT SYPHON GATHERS
+# COLUMN 1 = DATESTAMP
+# COLUMN 2 = SOURCE
+# COLUMN 3 = VALUE
+MYSQLUSER:mysql		
+# YOUR MYSQL USERNAME
+MYSQLPASS:mysqlpassword
+# YOUR MYSQL PASSWORD
+COMMITTRANSACTIONS:YES
+# COMMIT DATABASE TRANSACTIONS AFTER EXECUTION
+# -- YES or NO
+# -- TRANSACTIONAL DATABASES SUCH AS INNODB REQUIRE
+#    THIS FUNCTIONALITY, FUTURE MYISAM WILL ALSO
+#
+# NOTE THE RETENTION TIME OF RECORDS IS SOMETHING
+#   YOU'LL HAVE TO 'FUDGE' IN SEER+mod_openopc
+#   OR ON YOUR OWN WITH YOUR OWN CUSTOM SCRIPT,
+#   AS WE CAN'T CARRY THAT FUNCTION OUT FROM HERE.
+#   FOR SEER+mod_openopc, JUST SET UP A 'preset' 
+#   SIMILAR TO THE SYSTEM_FAULTS ONE AND ENTER 
+#   YOUR RETENTION TIME.  WE ASSUME YOU HAVE A 
+#   FULL WORKING KNOWLEDGE OF mod_openopc.
+#
+# -- THE FOLLOWING ONLY REQUIRED IF OPTION "CONDITIONAL" BEING USED ! --
+#
+YOURDEVICETABLENAME:mydevicetablename
+# MYSQL TABLE A RECORD NAMED "YOURDEVICENAMEFORLOG" AND HAS
+# A VALUE ASSOCIATED WITH IT WHICH YOU WANT TO CONDITIONALLY CHECK AGAINST.
+# WE ASSUME THIS TABLE TO BE IN DATABASE "MYSQLDB".
+YOURDEVICECOLUMNNAME:mydevicecolumnname
+# NAME OF COLUMN WITHIN "YOURDEVICETABLENAME" THAT IDENTIFIES RECORDS
+# BY NAME DECLARED IN "YOURDEVICENAMEFORLOG"
+# -- NOTE -- if "YOURDEVICENAMEFORLOG" VARIABLE NOT PRESENT, SYPHON WILL USE
+# VARIABLE "YOURDEVICENAME" IN ITS PLACE!
+YOURCONDITIONALVALUE:myconditionalvalue
+# VALUE YOU WISH TO TEST AGAINST... IF WE SEE THIS VALUE IN NEXT COLUMN OF
+# "YOURDEVICETABLENAME", FOR RECORD IDENTIFIED AS "YOURDEVICENAMEFORLOG", THEN
+# WE WILL PROCEED WITH THE OPERATION, ELSE WE WILL SKIP IT.
+# -------------------------------------------------------------------
